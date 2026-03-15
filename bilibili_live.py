@@ -71,7 +71,13 @@ class BilibiliLivePoller:
 
     def fetch(self, *, timeout_s: int = 10) -> list[DanmakuMessage]:
         url = f"{self.base_url}?roomid={self.room_id}"
-        req = urllib.request.Request(url, headers={"User-Agent": self.user_agent}, method="GET")
+        headers = {
+            "User-Agent": self.user_agent,
+            "Accept": "application/json, text/plain, */*",
+            "Accept-Language": "zh-CN,zh;q=0.9,en;q=0.8",
+            "Referer": f"https://live.bilibili.com/{self.room_id}",
+        }
+        req = urllib.request.Request(url, headers=headers, method="GET")
 
         try:
             with urllib.request.urlopen(req, timeout=timeout_s) as resp:
@@ -86,6 +92,11 @@ class BilibiliLivePoller:
             data = json.loads(payload)
         except json.JSONDecodeError as e:
             raise BilibiliLiveError(f"Invalid JSON from bilibili ajax/msg: {payload[:200]}") from e
+
+        code = data.get("code") if isinstance(data, dict) else None
+        if isinstance(code, int) and code != 0:
+            msg = data.get("message") if isinstance(data, dict) else ""
+            raise BilibiliLiveError(f"bilibili ajax/msg code={code} message={msg}")
 
         room = None
         try:
