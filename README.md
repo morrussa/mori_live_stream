@@ -12,10 +12,10 @@
 python3 -m mori_live_stream.cli --room-id <你的房间号> --include-history
 ```
 
-### 与 `vtuber.py` 集成
+### 与 `mori vtuber` 集成
 
 ```bash
-python3 vtuber.py --bilibili-room-url 'https://live.bilibili.com/<room_id>' --bilibili-interval 2 --bilibili-exit-when-offline --bilibili-catchup 1 --tts
+cargo run --release -- vtuber --bilibili-room-url 'https://live.bilibili.com/<room_id>' --bilibili-interval 2 --bilibili-exit-when-offline --bilibili-catchup 1 --tts
 ```
 
 > 注意：该接口属于“简单轮询”，不是官方稳定 SDK；若遇到 412/限流，需要更换 UA、增加间隔或改用 WebSocket 弹幕库（后续可升级）。

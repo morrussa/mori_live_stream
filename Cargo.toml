@@ -1,0 +1,13 @@
+[package]
+name = "mori_live_stream"
+version = "0.1.0"
+edition = "2021"
+publish = false
+
+[dependencies]
+anyhow = "1.0"
+chrono = { version = "0.4", default-features = true }
+mlua = { version = "0.10", features = ["luajit", "vendored", "serialize", "error-send"] }
+serde_json = "1.0"
+ureq = { version = "2.10", features = ["json"] }
+
